@@ -17,7 +17,6 @@ public class AccountController {
         this.view = view;
     }
 
-disconecct
 
     public Account getModel() {
         return model;
@@ -224,7 +223,7 @@ disconecct
         //Withraw account
         do {
             for (int i = 0; i < accounts.size(); i++) {
-                //Todo withraw all the  cash from the account
+                //TODO withraw all the  cash from the ACCOUNT
                 if (withDrawAccountNumber == accounts.get(i).getAccountNumber()) {
                     w = i;
                     withdrawAccount = accounts.get(i);
