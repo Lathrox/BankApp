@@ -11,7 +11,7 @@ public class Customer {
     private String ssn;
 
     //Array for object Customers
-    public static ArrayList<Customer> customers = new ArrayList<Customer>();
+    private static ArrayList<Customer> customers = new ArrayList<Customer>();
 
     public ArrayList<Customer> getCustomers() {
         return customers;

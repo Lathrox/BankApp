@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Account{
     //Array for storing Customers account
-    public static ArrayList<Account> accounts = new ArrayList<Account>();
+    private static ArrayList<Account> accounts = new ArrayList<Account>();
     //Instance Variables
     String owner;
     private double balance = 0;
