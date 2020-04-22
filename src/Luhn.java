@@ -1,5 +1,3 @@
-package Controller;
-
 public class Luhn {
 
     //Klar
