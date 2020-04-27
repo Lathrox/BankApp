@@ -198,14 +198,18 @@ public class Menu {
         //We can create an account now;
     }
     private void createAnAccount() throws InvalidAccountTypeException {
-        displayHeader("Create an Account");
-        int customer = selectCustomer();
-        String ssn = bank.getCustomers().get(customer).getSsn();
-        //Get account information
-        double initialDeposit = getDollarAmount("How much would you like to deposit?: ");
+        if (bank.getCustomers().size()<=0){
+            System.out.println("no customers at the bank");
+        }else {
+            displayHeader("Create an Account");
+            int customer = selectCustomer();
+            String ssn = bank.getCustomers().get(customer).getSsn();
+            //Get account information
+            double initialDeposit = getDollarAmount("How much would you like to deposit?: ");
 
-        Account account = new Account(ssn, initialDeposit,0);
-        bank.customers.get(customer).addAccount(account);
+            Account account = new Account(ssn, initialDeposit, 0);
+            bank.customers.get(customer).addAccount(account);
+        }
     }
 
     private double getDollarAmount(String question) {
