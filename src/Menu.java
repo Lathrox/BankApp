@@ -348,6 +348,17 @@ public class Menu {
         }
         return account;
     }
+    private void removeCustomer() throws InvalidAccountTypeException {
+        int customer = selectCustomer();
+        removeAllAccounts(customer);
+        if (bank.customers.get(customer).accounts.size()>0){
+            System.out.println("remove all the accounts before you can remove the customer");
+            return;
+        }else {
+            Customer removeCustomer = bank.customers.get(customer);
+            bank.customers.remove(removeCustomer);
+        }
+    }
     private void removeAccount() throws InvalidAccountTypeException {
         double balance = 0;
         double amount = 0;
@@ -362,14 +373,27 @@ public class Menu {
         Account removeAccount = bank.customers.get(customer).accounts.get(account);
         bank.customers.get(customer).accounts.remove(removeAccount);
     }
-    private void removeCustomer() throws InvalidAccountTypeException {
-        int customer = selectCustomer();
-        if (bank.customers.get(customer).accounts.size()>0){
-            System.out.println("remove all the accounts before you can remove the customer");
-            return;
-        }else {
-            Customer removeCustomer = bank.customers.get(customer);
-            bank.customers.remove(removeCustomer);
+
+    private void removeAllAccounts(int customer) {
+        double totalBalance = 0;
+        for (int i = 0; i < bank.customers.get(customer).accounts.size(); i++) {
+            double balance = 0;
+            balance = bank.customers.get(customer).accounts.get(i).getBalance();
+            System.out.println("Current balance: " + balance);
+            //Calculate how much in total that has been withdrawed
+            totalBalance = totalBalance + balance;
+            //done this way to simulate that the currency has been withdrawed.
+            //withdraw all the money from the account
+            balance -= balance; // = 0
+            bank.customers.get(customer).accounts.get(i).setBalance(balance);
+            //remove account
+            Account removeAccount = bank.customers.get(customer).accounts.get(i);
+            bank.customers.get(customer).accounts.remove(removeAccount);
+            //When account is removed the arraylist will shrink 1 value
+            // go back one step in the arraylist to check all the accounts
+            i--;
         }
+        System.out.println("We have deleted all your accounts");
+        System.out.println("You had a total amount of $ " + totalBalance);
     }
 }

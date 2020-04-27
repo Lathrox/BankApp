@@ -1,6 +1,6 @@
 public class Luhn {
 
-    //Klar
+    //Luhn algoritm that returns if the ssn is valid or not.
     public static boolean Luhn(String ssn) {
         int sum = 0;
         boolean alternate = false;

@@ -4,7 +4,8 @@ public class Account {
     String ssn;
     private double balance = 0;
     private int accountNumber;
-
+    //static int that increments for each account that is created.
+    //increament is handled in the constructur.
     private static int numberOfAccounts = 1000000;
 
     public Account(String ssn, double balance, int accountNumber){

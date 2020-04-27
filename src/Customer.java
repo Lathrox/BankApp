@@ -26,6 +26,7 @@ public class Customer {
     public String getSsn() {
         return ssn;
     }
+
     @Override
     public String toString(){
         return "\nCustomer Information\n" +
