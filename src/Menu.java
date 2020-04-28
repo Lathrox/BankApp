@@ -4,15 +4,11 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Menu {
-
     //Instance Variables
     Bank bank = new Bank();
-
-    boolean exit;
-
-
-
+    //printes menu and asks for menu choice
     public void runMenu() {
+        boolean exit = false;
         printHeader();
         while (!exit) {
             printMenu();
@@ -20,14 +16,12 @@ public class Menu {
             performAction(choice);
         }
     }
-
     private void printHeader() {
         System.out.println("+-----------------------------------+");
-        System.out.println("|        Welcome to Mr.V's          |");
+        System.out.println("|      Welcome to Sweetbank         |");
         System.out.println("|        Awesome Bank App           |");
         System.out.println("+-----------------------------------+");
     }
-
     private void printMenu() {
         displayHeader("Please make a selection");
         System.out.println("1) Create a new Customer");
@@ -40,7 +34,7 @@ public class Menu {
         System.out.println("8) remove an customer");
         System.out.println("0) Exit");
     }
-
+    //Controller that menu choice is valid
     private int getMenuChoice() {
         Scanner keyboard = new Scanner(System.in);
         int choice = -1;
@@ -57,9 +51,6 @@ public class Menu {
         } while (choice < 0 || choice > 8);
         return choice;
     }
-
-
-
     private void performAction(int choice)  {
         switch (choice) {
             case 0:
@@ -93,13 +84,11 @@ public class Menu {
                 removeCustomerAndAccount();
                 break;
             default:
-                System.out.println("Unknown error has occured.");
+                System.out.println("Unknown error has occurred.");
                 System.exit(0);
         }
     }
-
-
-
+    //Making asking for questions more efficient
     private String askQuestion(String question, List<String> answers) {
         String response = null;
         Scanner keyboard = new Scanner(System.in);
@@ -141,8 +130,6 @@ public class Menu {
         }
         return ssn;
     }
-
-
     private void createAnCustomer() {
         displayHeader("Create an Customer");
         //Get account information
@@ -152,7 +139,6 @@ public class Menu {
 
         Customer customer = new Customer(firstName, lastName, ssn);
         bank.addCustomer(customer);
-        //We can create an account now;
     }
     private void createAnAccount() {
         if (bank.getCustomers().size()<=0){
@@ -168,7 +154,6 @@ public class Menu {
             bank.customers.get(customer).addAccount(account);
         }
     }
-
     private double getDollarAmount(String question) {
         Scanner keyboard = new Scanner(System.in);
         System.out.print(question);
@@ -180,7 +165,6 @@ public class Menu {
         }
         return amount;
     }
-
     private void makeADeposit() {
         displayHeader("Make a Deposit");
         int customer = selectCustomer();
@@ -199,7 +183,6 @@ public class Menu {
             bank.customers.get(customer).accounts.get(account).deposit(amount);
         }
     }
-
     private void makeAWithdrawal() {
         displayHeader("Make a Withdrawal");
         int customer = selectCustomer();
@@ -218,8 +201,6 @@ public class Menu {
             bank.customers.get(customer).accounts.get(account).withdraw(amount);
         }
     }
-
-
     private void makeATransfer() {
         double amount = 0, balanceW = 0, balanceD = 0;
         int withdrawCustomer = -1,withdrawAccount = -1, depositCustomer = -1, depositAccount = -1;
@@ -251,7 +232,6 @@ public class Menu {
             bank.customers.get(depositCustomer).accounts.get(depositAccount).deposit(amount);
             System.out.println("money is transfered");
         }
-
     }
     private void listBalances() {
         displayHeader("List Account Details");
@@ -266,7 +246,6 @@ public class Menu {
         displayHeader("Account Details");
         System.out.println(bank.customers.get(customer).accounts.get(account).basicInfo());
     }
-
     private void displayHeader(String message){
         System.out.println();
         int width = message.length() + 6;
@@ -304,7 +283,6 @@ public class Menu {
         }
         return customer;
     }
-
     private int selectAccount(int customer) {
         Scanner keyboard = new Scanner(System.in);
         int account;
@@ -364,7 +342,6 @@ public class Menu {
     }
         Customer removeCustomer = bank.customers.get(customer);
         bank.customers.remove(removeCustomer);
-
     }
     private void removeAccount() {
         double balance = 0;
@@ -386,5 +363,4 @@ public class Menu {
         Account removeAccount = bank.customers.get(customer).accounts.get(account);
         bank.customers.get(customer).accounts.remove(removeAccount);
     }
-
 }
