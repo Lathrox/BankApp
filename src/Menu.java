@@ -67,7 +67,7 @@ public class Menu {
                 System.exit(0);
                 break;
             case 1: {
-                    createAnCustomer();
+                createAnCustomer();
                 break;
             }
             case 2:{
@@ -90,17 +90,18 @@ public class Menu {
                 removeAccount();
                 break;
             case 8:
-                removeCustomer();
+                removeCustomerAndAccount();
                 break;
             default:
                 System.out.println("Unknown error has occured.");
+                System.exit(0);
         }
     }
 
 
 
     private String askQuestion(String question, List<String> answers) {
-        String response = "";
+        String response = null;
         Scanner keyboard = new Scanner(System.in);
         boolean choices = ((answers == null) || answers.size() == 0) ? false : true;
         boolean firstRun = true;
@@ -183,10 +184,16 @@ public class Menu {
     private void makeADeposit() {
         displayHeader("Make a Deposit");
         int customer = selectCustomer();
+        if (customer == -1) {
+            return;
+        }
         int account = selectAccount(customer);
+        if (account == -1){
+            return;
+        }
         if (account >= 0) {
             double amount = getDollarAmount("How much would you like to deposit?: ");
-            if(amount <= 0){
+            if (amount <= 0) {
                 System.out.println("You cannot deposit negative money.");
             }
             bank.customers.get(customer).accounts.get(account).deposit(amount);
@@ -196,40 +203,50 @@ public class Menu {
     private void makeAWithdrawal() {
         displayHeader("Make a Withdrawal");
         int customer = selectCustomer();
+        if (customer == -1) {
+            return;
+        }
         int account = selectAccount(customer);
-        if (account >= 0) {
-            double amount = getDollarAmount("How much would you like to withdraw?: ");
-            if(amount + 5 > bank.customers.get(customer).accounts.get(account).getBalance()) {
-                System.out.println("You have insufficient funds.");
-                return;
-            }else {
-                bank.customers.get(customer).accounts.get(account).withdraw(amount);
-            }
+        if (account == -1){
+            return;
+        }
+        double amount = getDollarAmount("How much would you like to withdraw?: ");
+        if (amount + 5 > bank.customers.get(customer).accounts.get(account).getBalance()) {
+            System.out.println("You have insufficient funds.");
+            return;
+        } else {
+            bank.customers.get(customer).accounts.get(account).withdraw(amount);
         }
     }
 
+
     private void makeATransfer() {
         double amount = 0, balanceW = 0, balanceD = 0;
+        int withdrawCustomer = -1,withdrawAccount = -1, depositCustomer = -1, depositAccount = -1;
         int w = 0;
         int d = 0;
         //1. select account to withdraw from
-        int withdrawCustomer = selectCustomer();
-        int withdrawAccount = selectAccount(withdrawCustomer);
+        if(bank.getCustomers().isEmpty()) {
+            System.out.println("No customers at the bank");
+            return;
+        }
+        withdrawCustomer = selectCustomer();
+        withdrawAccount = selectAccount(withdrawCustomer);
         //2. select account to deposit to
-        int depositCustomer = selectCustomer();
-        int depositAccount = selectAccount(depositCustomer);
+        depositCustomer = selectCustomer();
+        depositAccount = selectAccount(depositCustomer);
         //3. ask how much to transfer
         if (withdrawAccount >= 0) {
             amount = getDollarAmount("How much would you like to transfer?: ");
         }
         //controll that you can withdraw the amount from the account
-        if(amount <= 0){
+        if (amount <= 0) {
             System.out.println("You cannot deposit negative money.");
             return;
-        }else if(amount + 5 > bank.customers.get(withdrawCustomer).accounts.get(withdrawAccount).getBalance()){
+        } else if (amount + 5 > bank.customers.get(withdrawCustomer).accounts.get(withdrawAccount).getBalance()) {
             System.out.println("You have insufficient funds.");
             return;
-        }else {
+        } else {
             bank.customers.get(withdrawCustomer).accounts.get(withdrawAccount).withdraw(amount);
             bank.customers.get(depositCustomer).accounts.get(depositAccount).deposit(amount);
             System.out.println("money is transfered");
@@ -239,12 +256,15 @@ public class Menu {
     private void listBalances() {
         displayHeader("List Account Details");
         int customer = selectCustomer();
-        int account = selectAccount(customer);
-        if (account >= 0) {
-            displayHeader("Account Details");
-            System.out.println(bank.customers.get(customer).accounts.get(account).basicInfo());
-
+        if (customer == -1) {
+            return;
         }
+        int account = selectAccount(customer);
+        if (account == -1){
+            return;
+        }
+        displayHeader("Account Details");
+        System.out.println(bank.customers.get(customer).accounts.get(account).basicInfo());
     }
 
     private void displayHeader(String message){
@@ -308,34 +328,20 @@ public class Menu {
         }
         return account;
     }
-    private void removeCustomer() {
-        int customer = selectCustomer();
-        removeAllAccounts(customer);
-        if (bank.customers.get(customer).accounts.size()>0){
-            System.out.println("remove all the accounts before you can remove the customer");
-            return;
-        }else {
-            Customer removeCustomer = bank.customers.get(customer);
-            bank.customers.remove(removeCustomer);
-        }
-    }
-    private void removeAccount() {
-        double balance = 0;
-        double amount = 0;
-        int customer = selectCustomer();
-        int account = selectAccount(customer);
-        balance = bank.customers.get(customer).accounts.get(account).getBalance();
-        balance -= amount; // = 0
-        bank.customers.get(customer).accounts.get(account).setBalance(balance);
-        System.out.println("You have withdraw " + amount + "new balance is " + balance);
-        System.out.println("We will now delete your account");
-        //remove account
-        Account removeAccount = bank.customers.get(customer).accounts.get(account);
-        bank.customers.get(customer).accounts.remove(removeAccount);
-    }
-
-    private void removeAllAccounts(int customer) {
+    private void removeCustomerAndAccount() {
         double totalBalance = 0;
+        int customer = selectCustomer();
+        if (customer == -1){
+            return;
+        }
+        //Controll that user want to go trough with removing everything
+        String validation = askQuestion("Are you sure you want to delete all " +
+                "your accounts and stop being our customer \n" +
+                "y/n: ", null);
+        if (!validation.equals("y")) {
+            return;
+        }else if(validation.equals("y")){
+        //Remove all accounts
         for (int i = 0; i < bank.customers.get(customer).accounts.size(); i++) {
             double balance = 0;
             balance = bank.customers.get(customer).accounts.get(i).getBalance();
@@ -356,4 +362,29 @@ public class Menu {
         System.out.println("We have deleted all your accounts");
         System.out.println("You had a total amount of $ " + totalBalance);
     }
+        Customer removeCustomer = bank.customers.get(customer);
+        bank.customers.remove(removeCustomer);
+
+    }
+    private void removeAccount() {
+        double balance = 0;
+        double amount = 0;
+        int customer = selectCustomer();
+        if (customer == -1) {
+            return;
+        }
+        int account = selectAccount(customer);
+        if (account == -1){
+            return;
+        }
+        balance = bank.customers.get(customer).accounts.get(account).getBalance();
+        balance -= amount; // = 0
+        bank.customers.get(customer).accounts.get(account).setBalance(balance);
+        System.out.println("You have withdraw " + amount + "new balance is " + balance);
+        System.out.println("We will now delete your account");
+        //remove account
+        Account removeAccount = bank.customers.get(customer).accounts.get(account);
+        bank.customers.get(customer).accounts.remove(removeAccount);
+    }
+
 }
