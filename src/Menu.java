@@ -10,10 +10,7 @@ public class Menu {
 
     boolean exit;
 
-    public static void main(String[] args) {
-        Menu menu = new Menu();
-        menu.runMenu();
-    }
+
 
     public void runMenu() {
         printHeader();
@@ -158,33 +155,6 @@ public class Menu {
         return ssn;
     }
 
-    private double getDeposit(String accountType) {
-        Scanner keyboard = new Scanner(System.in);
-        double initialDeposit = 0;
-        Boolean valid = false;
-        while (!valid) {
-            System.out.print("Please enter an initial deposit: ");
-            try {
-                initialDeposit = Double.parseDouble(keyboard.nextLine());
-            } catch (NumberFormatException e) {
-                System.out.println("Deposit must be a number.");
-            }
-            if (accountType.equalsIgnoreCase("checking")) {
-                if (initialDeposit < 100) {
-                    System.out.println("Checking accounts require a minimum of $100 dollars to open.");
-                } else {
-                    valid = true;
-                }
-            } else if (accountType.equalsIgnoreCase("savings")) {
-                if (initialDeposit < 50) {
-                    System.out.println("Savings accounts require a minimum of $50 dollars to open.");
-                } else {
-                    valid = true;
-                }
-            }
-        }
-        return initialDeposit;
-    }
 
     private void createAnCustomer() throws InvalidAccountTypeException {
         displayHeader("Create an Customer");
