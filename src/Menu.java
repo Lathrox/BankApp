@@ -58,26 +58,20 @@ public class Menu {
         return choice;
     }
 
-    private void performAction(int choice) {
+
+
+    private void performAction(int choice)  {
         switch (choice) {
             case 0:
                 System.out.println("Thank you for using our application.");
                 System.exit(0);
                 break;
             case 1: {
-                try {
                     createAnCustomer();
-                } catch (InvalidAccountTypeException ex) {
-                    System.out.println("Customer was not created successfully.");
-                }
                 break;
             }
             case 2:{
-                try {
-                    createAnAccount();
-                } catch (InvalidAccountTypeException ex) {
-                    System.out.println("Customer was not created successfully.");
-                }
+                createAnAccount();
                 break;
             }
             case 3:
@@ -93,18 +87,10 @@ public class Menu {
                 makeATransfer();
                 break;
             case 7:
-                try {
-                    removeAccount();
-                } catch (InvalidAccountTypeException e) {
-                    System.out.println("Account was not removed successfully.");
-                }
+                removeAccount();
                 break;
             case 8:
-                try {
-                    removeCustomer();
-                } catch (InvalidAccountTypeException e) {
-                    System.out.println("Customer was not removed successfully.");
-                }
+                removeCustomer();
                 break;
             default:
                 System.out.println("Unknown error has occured.");
@@ -156,7 +142,7 @@ public class Menu {
     }
 
 
-    private void createAnCustomer() throws InvalidAccountTypeException {
+    private void createAnCustomer() {
         displayHeader("Create an Customer");
         //Get account information
         String firstName = askQuestion("Please enter your first name: ", null);
@@ -167,7 +153,7 @@ public class Menu {
         bank.addCustomer(customer);
         //We can create an account now;
     }
-    private void createAnAccount() throws InvalidAccountTypeException {
+    private void createAnAccount() {
         if (bank.getCustomers().size()<=0){
             System.out.println("no customers at the bank");
         }else {
@@ -322,7 +308,7 @@ public class Menu {
         }
         return account;
     }
-    private void removeCustomer() throws InvalidAccountTypeException {
+    private void removeCustomer() {
         int customer = selectCustomer();
         removeAllAccounts(customer);
         if (bank.customers.get(customer).accounts.size()>0){
@@ -333,7 +319,7 @@ public class Menu {
             bank.customers.remove(removeCustomer);
         }
     }
-    private void removeAccount() throws InvalidAccountTypeException {
+    private void removeAccount() {
         double balance = 0;
         double amount = 0;
         int customer = selectCustomer();
