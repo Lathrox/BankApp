@@ -286,6 +286,8 @@ public class Menu {
     }
     private int selectCustomer() {
         Scanner keyboard = new Scanner(System.in);
+        boolean firstRun = true;
+        int customer;
         ArrayList<Customer> customers = bank.getCustomers();
         if (customers.size() <= 0) {
             System.out.println("No customers at your bank.");
@@ -295,22 +297,21 @@ public class Menu {
         for (int i = 0; i < customers.size(); i++) {
             System.out.println("\t" + (i + 1) + ") " + customers.get(i).basicInfo());
         }
-        int customer;
+
         System.out.print("Please enter your selection: ");
-        try {
-            customer = Integer.parseInt(keyboard.nextLine()) - 1;
-        } catch (NumberFormatException e) {
-            customer = -1;
-        }
-        if (customer < 0 || customer > customers.size()) {
-            System.out.println("Invalid account selected.");
-            customer = -1;
-        }
+        do {
+            if (!firstRun) {
+                System.out.println("Invalid selection. Please try again.");
+            }
+            customer = keyboard.nextInt() - 1;
+            firstRun = false;
+            }while (customer < 0 || customer >= customers.size());
         return customer;
     }
     private int selectAccount(int customer) {
         Scanner keyboard = new Scanner(System.in);
         int account;
+        boolean firstRun =true;
         if (bank.customers.get(customer).accounts.size() <= 0) {
             System.out.println("No accounts for the customer.");
             return -1;
@@ -320,15 +321,13 @@ public class Menu {
             System.out.println("\t" + (i + 1) + ") " + bank.customers.get(customer).accounts.get(i).basicInfo());
         }
         System.out.print("Please enter your selection: ");
-        try {
+        do {
+            if (!firstRun) {
+                System.out.println("Invalid selection. Please try again.");
+            }
             account = keyboard.nextInt() - 1;
-        } catch (NumberFormatException e) {
-            account = -1;
-        }
-        if (account < 0 || account > bank.customers.get(customer).accounts.size()) {
-            System.out.println("Invalid account selected.");
-            account = -1;
-        }
+            firstRun = false;
+        }while (account < 0 || account >= bank.customers.get(customer).accounts.size());
         return account;
     }
     private void removeCustomerAndAccount() {
