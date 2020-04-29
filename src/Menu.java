@@ -108,13 +108,17 @@ public class Menu {
                 System.out.print(answers.get(answers.size() - 1));
                 System.out.print("): ");
             }
-                response = keyboard.nextLine();
-
+            //converts respons to lowercase correctly
+                response = keyboard.nextLine().toLowerCase();
             firstRun = false;
             if (choices) {
                 if (!answers.contains(response)){
                     response = "";
                 }
+            }
+            //checks that answear only contain characters.
+            if((!response.matches("^[a-zA-Z]*$"))){
+                response = "";
             }
         } while (response.length() == 0);
         return response;
@@ -123,6 +127,7 @@ public class Menu {
         Scanner keyboard = new Scanner(System.in);
         String ssn = "";
         boolean firstRun = true;
+        //Loop that runs until ssn matches every requirement
         do {
             if (!firstRun) {
                 System.out.println("Invalid selection. Please try again.");
@@ -132,6 +137,11 @@ public class Menu {
         boolean valid = false;
         while (!valid) {
             ssn = keyboard.nextLine();
+            //Controlls that ssn only contain numbers
+            if (!ssn.matches("^[0-9]*$")){
+                ssn="";
+            }
+            //Checks that ssn is valid
             if (Luhn.Luhn(ssn)) {
                 valid = true;
             } else {
