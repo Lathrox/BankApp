@@ -1,5 +1,6 @@
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -90,7 +91,7 @@ public class Menu {
     }
     //Making asking for questions more efficient
     private String askQuestion(String question, List<String> answers) {
-        String response = null;
+        String response = "";
         Scanner keyboard = new Scanner(System.in);
         boolean choices = ((answers == null) || answers.size() == 0) ? false : true;
         boolean firstRun = true;
@@ -107,18 +108,27 @@ public class Menu {
                 System.out.print(answers.get(answers.size() - 1));
                 System.out.print("): ");
             }
-            response = keyboard.nextLine();
+                response = keyboard.nextLine();
+
             firstRun = false;
-            if (!choices) {
-                break;
+            if (choices) {
+                if (!answers.contains(response)){
+                    response = "";
+                }
             }
-        } while (!answers.contains(response));
+        } while (response.length() == 0);
         return response;
     }
     public static String validateSsn(String question, Object o) {
         Scanner keyboard = new Scanner(System.in);
-        System.out.print(question);
         String ssn = "";
+        boolean firstRun = true;
+        do {
+            if (!firstRun) {
+                System.out.println("Invalid selection. Please try again.");
+            }
+            System.out.print(question);
+
         boolean valid = false;
         while (!valid) {
             ssn = keyboard.nextLine();
@@ -128,6 +138,7 @@ public class Menu {
                 System.out.println("You must enter a valid ssn.");
             }
         }
+        } while (ssn.length() == 0);
         return ssn;
     }
     private void createAnCustomer() {
@@ -313,12 +324,8 @@ public class Menu {
             return;
         }
         //Controll that user want to go trough with removing everything
-        String validation = askQuestion("Are you sure you want to delete all " +
-                "your accounts and stop being our customer \n" +
-                "y/n: ", null);
-        if (!validation.equals("y")) {
-            return;
-        }else if(validation.equals("y")){
+        String accountType = askQuestion("Are you sure you want to delete all" +
+                "your accounts and stop being our customer", Arrays.asList("yes", "no"));
         //Remove all accounts
         for (int i = 0; i < bank.customers.get(customer).accounts.size(); i++) {
             double balance = 0;
@@ -339,7 +346,7 @@ public class Menu {
         }
         System.out.println("We have deleted all your accounts");
         System.out.println("You had a total amount of $ " + totalBalance);
-    }
+
         Customer removeCustomer = bank.customers.get(customer);
         bank.customers.remove(removeCustomer);
     }
