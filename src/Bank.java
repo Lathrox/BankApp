@@ -7,6 +7,14 @@ public class Bank {
 
     
     void addCustomer(Customer customer) {
+        //Check if there already is an Customer with the ssn
+        for (int i = 0; i<customers.size(); i++){
+             if (customers.get(i).getSsn().equals(customer.getSsn())){
+                 System.out.println("there is already an customer with that ssn");
+                 return;
+             }
+
+        }
         customers.add(customer);
     }
 
