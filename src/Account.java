@@ -32,7 +32,16 @@ public class Account {
     }
     
     public void withdraw(double amount){
-        balance -= amount + 5;
+        amount = amount + 5;
+        if(amount <= 0){
+            System.out.println("You cannot withdraw negative money.");
+            return;
+        }
+        if (balance < amount) {
+            System.out.println("You have insufficient funds.");
+            return;
+        }
+        balance -= amount;
         System.out.println("You have withdrawn $" + amount + " dollars and incurred a fee of $5");
         System.out.println("You now have a balance of $" + balance);
     }
@@ -46,7 +55,6 @@ public class Account {
         System.out.println("You have deposited $" + amount);
         System.out.println("You now have a balance of $" + balance);
     }
-
     public void removeAccount(Account account) {
         account.removeAccount(account);
     }
