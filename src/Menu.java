@@ -170,6 +170,7 @@ public class Menu {
             String ssn = bank.getCustomers().get(customer).getSsn();
             //Get account information
             double initialDeposit = getDollarAmount("How much would you like to deposit?: ");
+
             if (initialDeposit <= 0) {
                 System.out.println("You cannot deposit negative money.");
             }
@@ -181,12 +182,21 @@ public class Menu {
         Scanner keyboard = new Scanner(System.in);
         System.out.print(question);
         double amount = 0;
+        do {
         try {
             amount = Double.parseDouble(keyboard.nextLine());
         } catch (NumberFormatException e) {
+            System.out.println("value must be entered in numbers \n" +
+                    "Try again: ");
             amount = 0;
         }
+        if (amount < 0){
+            System.out.println("Amount must be positive \n" +
+                    "Try again: ");
+        }
+        }while (amount <=0);
         return amount;
+
     }
     private void makeADeposit() {
         displayHeader("Make a Deposit");
@@ -200,9 +210,6 @@ public class Menu {
         }
         if (account >= 0) {
             double amount = getDollarAmount("How much would you like to deposit?: ");
-            if (amount <= 0) {
-                System.out.println("You cannot deposit negative money.");
-            }
             bank.customers.get(customer).accounts.get(account).deposit(amount);
         }
     }
@@ -220,6 +227,7 @@ public class Menu {
             bank.customers.get(customer).accounts.get(account).withdraw(amount);
     }
     private void makeATransfer() {
+        displayHeader("Transfer money");
         double amount = 0, balanceW = 0, balanceD = 0;
         int withdrawCustomer = -1,withdrawAccount = -1, depositCustomer = -1, depositAccount = -1;
         int w = 0;
@@ -236,7 +244,7 @@ public class Menu {
         depositAccount = selectAccount(depositCustomer);
         //3. ask how much to transfer
         if (withdrawAccount != 0 || depositAccount != 0) {
-            System.out.println("controll that both customers has a bank account");
+            System.out.println("control that both customers has a bank account");
             return;
         }
         //Check that they don't transfer money to the same account.
@@ -246,10 +254,7 @@ public class Menu {
         }
         amount = getDollarAmount("How much would you like to transfer?: ");
         //controll that you can withdraw the amount from the account
-        if (amount <= 0) {
-            System.out.println("You cannot deposit negative money.");
-            return;
-        } else if (amount + 5> bank.customers.get(withdrawCustomer).accounts.get(withdrawAccount).getBalance()) {
+        if (amount + 5> bank.customers.get(withdrawCustomer).accounts.get(withdrawAccount).getBalance()) {
             System.out.println("You have insufficient funds.");
             return;
     } else {
