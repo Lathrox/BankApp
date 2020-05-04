@@ -308,7 +308,12 @@ public class Menu {
             if (!firstRun) {
                 System.out.println("Invalid selection. Please try again.");
             }
-            customer = keyboard.nextInt() - 1;
+            try {
+                customer = Integer.parseInt(keyboard.nextLine()) - 1;
+            }catch (NumberFormatException e){
+                System.out.println("Input must be a number");
+                customer = -1;
+            }
             firstRun = false;
             }while (customer < 0 || customer >= customers.size());
         return customer;
@@ -330,7 +335,12 @@ public class Menu {
             if (!firstRun) {
                 System.out.println("Invalid selection. Please try again.");
             }
-            account = keyboard.nextInt() - 1;
+            try {
+                account = Integer.parseInt(keyboard.nextLine()) - 1;
+            }catch (NumberFormatException e){
+                System.out.println("Input must be a number");
+                account = -1;
+            }
             firstRun = false;
         }while (account < 0 || account >= bank.customers.get(customer).accounts.size());
         return account;
